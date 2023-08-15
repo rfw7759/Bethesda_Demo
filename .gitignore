@@ -1,0 +1,5 @@
+Library/
+.vsconfig
+Assets/AmplifyShaderEditor/
+obj/
+Logs/
