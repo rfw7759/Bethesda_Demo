@@ -3,3 +3,5 @@ Library/
 Assets/AmplifyShaderEditor/
 obj/
 Logs/
+.vs/
+Bethesda.sln
