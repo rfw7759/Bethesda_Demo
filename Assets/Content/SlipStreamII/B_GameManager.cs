@@ -13,18 +13,22 @@ public class B_GameManager : MonoBehaviour
     [SerializeField] ARPlaneManager m_ARPlaneManager;
     [SerializeField] GameObject spawnablePrefab;
     [SerializeField] Camera gameCam;
-
     [SerializeField] Transform ship;
     [SerializeField] Transform shipGimbal;
 
+
+     [SerializeField] List<Vector3> PositionsChain = new List<Vector3>();
+    private float LastTimePositionUpdated = 0;
 
     private Vector3 ShipStartLoc;
     private Vector3 TapLocation;
     private Vector3 LerpLoc;
 
-    GameObject HitLocationObj;
-
+    [SerializeField] GameObject HitLocationObj;
     [SerializeField] Transform shiptarget;
+
+    [SerializeField] GameObject AimerMesh;
+    [SerializeField] GameObject ShipMesh;
 
     private List<ARRaycastHit> hits = new List<ARRaycastHit>();
 
@@ -70,7 +74,7 @@ public class B_GameManager : MonoBehaviour
             
                 else
                 {
-                    HitLocationObj = Instantiate(spawnablePrefab, pose.position, pose.rotation);
+                   // HitLocationObj = Instantiate(spawnablePrefab, pose.position, pose.rotation);
                     TapLocation = hit.pose.position;
                 }
                 
@@ -95,8 +99,53 @@ public class B_GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
+        if (HitLocationObj)
+        {  
 
-        
+            if (ShipMesh)
+            {
+                Vector3 currentShipLoc = ShipMesh.transform.position;
+                var Lerploc = Vector3.Lerp(ShipMesh.transform.position, HitLocationObj.transform.position, Time.deltaTime * 0.4f);
+                var LookAtRot = Quaternion.LookRotation(ShipMesh.transform.position - HitLocationObj.transform.position);
+                var LookLerp = Quaternion.Lerp(ShipMesh.transform.rotation, LookAtRot, Time.deltaTime * 2);
+                ShipMesh.transform.rotation = LookLerp;
+                ShipMesh.transform.position = Lerploc;
+            }
+
+        }
+        */
+
+    }
+
+    private Vector3 UpdatePath(Vector3 PathLoc)
+    {
+        Vector3 CurrentOutLoc = PathLoc;
+
+        if (Time.time -LastTimePositionUpdated > .03f)
+        {
+            LastTimePositionUpdated = Time.time;
+            PositionsChain.Add(PathLoc);
+            if(PositionsChain.Count > 30)
+            {
+                PositionsChain.RemoveAt(0);
+            }
+        }
+
+        if (PositionsChain.Count > 0)
+        {
+            return PositionsChain[0];
+        }
+
+
+        return CurrentOutLoc;
+    }
+
+
+
+
+    private void UpdateShip()
+    {
         if (HitLocationObj && ship)
         {
             Vector3 CamAim = new Vector3(gameCam.transform.forward.x, 0, gameCam.transform.forward.z).normalized;
@@ -106,10 +155,10 @@ public class B_GameManager : MonoBehaviour
 
             Vector3 Loc = TargetLoc - ship.position;
             Quaternion rot = Quaternion.LookRotation(Loc, Vector3.up);
-            Quaternion lerpRot = Quaternion.Lerp(ship.rotation, rot, Time.deltaTime * .2f);
+            Quaternion lerpRot = Quaternion.Lerp(ship.rotation, rot, Time.deltaTime * .1f);
 
             ship.rotation = lerpRot;
-            LerpLoc = Vector3.Lerp(ship.position, TargetLoc, Time.deltaTime * 0.8f);
+            LerpLoc = Vector3.Lerp(ship.position, TargetLoc, Time.deltaTime * 0.2f);
             ship.position = LerpLoc;
 
             Vector3 A = gameCam.transform.position - ship.position;
@@ -120,41 +169,8 @@ public class B_GameManager : MonoBehaviour
             shipGimbal.localRotation = Quaternion.Euler(yaw * 45, 90, 0);
 
         }
-        
-        /*
-        if (shiptarget && ship)
-        {
-
-
-
-            Vector3 CamAim = new Vector3(gameCam.transform.forward.x, 0, gameCam.transform.forward.z).normalized;
-            Vector3 offsetAim = gameCam.transform.position + (CamAim * 33);
-            Vector3 TargetLoc = new Vector3(offsetAim.x, shiptarget.transform.position.y, offsetAim.z);
-
-
-            Vector3 A = gameCam.transform.position - ship.position;
-            Vector3 B = gameCam.transform.forward;
-
-
-            Vector3 ShipForwardNormal = new Vector3(A.x, 0, A.z).normalized;
-            Vector3 CamForwardNormal = new Vector3(B.x, 0, B.z).normalized;
-            float yaw =  Vector3.Dot(ShipForwardNormal, CamForwardNormal) + 1;
-            Debug.Log(yaw);
-            shipGimbal.localRotation = Quaternion.Euler(yaw * 45, 90, 0);
-
-            Vector3 Loc = TargetLoc - ship.position;
-            Quaternion rot = Quaternion.LookRotation(Loc, Vector3.up);
-            Quaternion lerpRot = Quaternion.Lerp(ship.rotation, rot, Time.deltaTime * 2f);
-
-
-            ship.rotation = lerpRot;
-            LerpLoc = Vector3.Lerp(ship.position, TargetLoc, Time.deltaTime * 0.2f);
-            ship.position = LerpLoc;
-
-        }
-        
-        */
-
 
     }
+
+
 }

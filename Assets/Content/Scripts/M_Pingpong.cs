@@ -5,7 +5,10 @@ using UnityEngine;
 public class PingPong : MonoBehaviour
 {
 
-    public float lerpspeed = 10.0f;
+    public float lerpspeedX = 10.0f;
+    public float lerpspeedY = 10.0f;
+    public float lerpspeedZ = 10.0f;
+
     float LerpRot;
 
 
@@ -63,20 +66,20 @@ public class PingPong : MonoBehaviour
         InitialYaw = InitialYaw + Time.deltaTime * 22;
 
 
-        Vector3 rotationUpdate = new Vector3(  ((float)Mathf.Sin((Time.time * lerpspeed)) * WaveSizeX),
-                                            ((float)Mathf.Sin((Time.time * lerpspeed)) * WaveSizeY),
-                                             ((float)Mathf.Sin((Time.time * lerpspeed)) * WaveSizeZ ));
+        Vector3 rotationUpdate = new Vector3(  ((float)Mathf.Sin((Time.time * lerpspeedX)) * WaveSizeX),
+                                            ((float)Mathf.Sin((Time.time * lerpspeedY)) * WaveSizeY),
+                                             ((float)Mathf.Sin((Time.time * lerpspeedZ)) * WaveSizeZ ));
 
         transform.localRotation = Quaternion.Euler(rotationUpdate);
 
 
-
+        /*
         transform.localPosition = new Vector3(Initialx + ((float)Mathf.Sin((Time.time + Initialoffset) * XOffset) * WaveSizeX * PositionMult),
                                          Initialy + ((float)Mathf.Sin((Time.time + Initialoffset) * YOffset) * WaveSizeY * PositionMult),
                                          Initialz + ((float)Mathf.Sin((Time.time + Initialoffset) * ZOffset) * WaveSizeZ * PositionMult));
+*/
 
-
-       // transform.localScale = InitialScale + (new Vector3(1, 1, 1) * (float)Mathf.Sin((Time.time * ScaleOffset) * WaveSizeX) * ScaleMult);
+        // transform.localScale = InitialScale + (new Vector3(1, 1, 1) * (float)Mathf.Sin((Time.time * ScaleOffset) * WaveSizeX) * ScaleMult);
 
 
     }

@@ -160,7 +160,7 @@ PlayerSettings:
     Standalone: 0
     iPhone: 0
     tvOS: 0
-  overrideDefaultApplicationIdentifier: 0
+  overrideDefaultApplicationIdentifier: 1
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 24
   AndroidTargetSdkVersion: 0
@@ -758,7 +758,8 @@ PlayerSettings:
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
   scriptingDefineSymbols:
-    iPhone: 
+    Android: ARCORE_INTERNAL_GEOSPATIAL_CREATOR_ENABLED;AMPLIFY_SHADER_EDITOR
+    iPhone: ARCORE_INTERNAL_GEOSPATIAL_CREATOR_ENABLED
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend:
